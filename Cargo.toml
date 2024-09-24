@@ -1,0 +1,16 @@
+[package]
+name = "token-identifier"
+description = "A library to create 32 bit tokens with checkbits and identifier of such tokens"
+readme = "README.md"
+version = "0.1.0"
+edition = "2021"
+authors = ["Klaus<klaus@itzgrund.net>"]
+repository = "https://github.com/KlausTh/token-identifier"
+license = "LGPL"
+license-file = "LICENSE.txt"
+categories = ["encoding", "cryptography"]
+keywords = ["identifier", "token", "transfer", "spelling", "checksum"]
+
+[dependencies]
+rand = "0.8.5"
+regex = "1.10.6"
