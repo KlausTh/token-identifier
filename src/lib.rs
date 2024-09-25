@@ -18,6 +18,7 @@ pub struct Token {
     value : u32
 }
 
+#[derive(Debug)]
 pub struct TokenId {
     tokens : Rc<Box<[Token]>>
 }
