@@ -6,7 +6,6 @@ version = "0.1.0"
 edition = "2021"
 authors = ["Klaus<klaus@itzgrund.net>"]
 repository = "https://github.com/KlausTh/token-identifier"
-license = "LGPL"
 license-file = "LICENSE.txt"
 categories = ["encoding", "cryptography"]
 keywords = ["identifier", "token", "transfer", "spelling", "checksum"]

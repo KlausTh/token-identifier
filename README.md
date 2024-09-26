@@ -15,6 +15,19 @@ Token
 
 Basic token value is a 32 bit value, plus 3 bits of error recognition. This token is represented with seven digits, each digit encoded five bits.
 
+Example
+-------
+
+    use token_identifier::Token;
+
+    fn main() {
+        let token = Token::new();
+
+        println!("simple 32 bit token : {}", token);
+    }
+
+ > simple 32 bit token : hfmon16
+
 Encoding
 --------
 
@@ -30,28 +43,25 @@ BNF
     <token> ::= <digit> <digit> <digit> <digit> <digit> <digit> <digit>
     <digit> ::= 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | a | b | c | d | e | f | g | h | i | j | k | l | m | n | o | p | q | r | s | t | u | v
 
-Example
--------
- > hfmon16
-
 Token Identifier
 ================
 
 Token identifier means a list of token separated with char '-'. The size of a token id is a multiple of 32 bits.
 
+Example
+-------
+
+    use token_identifier::TokenId;
+
+    fn main() {
+        let token = TokenId::new_128();
+
+        println!("token id with 128 bits : {}", token);
+    }
+
+ > token id with 128 bits : mht6fmh-aputm5h-5ih87pp-upc8sqc
+
 BNF
 ---
 
-    <tokenid> ::= <token> | <token> '-' <tokenid>
-
-Examples
---------
-
-64 bit ID
- > rvhlgd0-a2m76jr
-
-128 bit ID
- > r76d07p-1k4b3as-158sk46-r8ue8mt
-
-256 bit ID
- > 36lkic1-u9toc59-f4dosvu-is08cmq-37s9a6f-llvjs1o-vbd9soi-qssbj2c
+    <tokenid> ::= <token> '-' <tokenid> | <token>

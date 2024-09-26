@@ -1,14 +1,15 @@
-
 #[cfg(test)]
 mod tests;
 
+mod parser;
+
+use parser::{parse_token, parse_token_id};
 use std::fmt;
 use std::fmt::{Display, Formatter};
 use std::iter::repeat_with;
 use std::rc::Rc;
 use rand::thread_rng;
 use rand::Rng;
-use regex::Regex;
 
 const RADIX : u32 = 32;
 
@@ -35,22 +36,7 @@ impl Token {
     }
 
     pub fn decode(token : &str) -> Result<Self, &str> {
-        let filter = Regex::new("[0-9a-v]{7}").unwrap();
-
-        if filter.is_match(token) {
-            let block : u64 = token.chars()
-                .map(|c| u64::from(c.to_digit(RADIX).unwrap()))
-                .reduce(|d1,d2| (d1 << 5) + d2).expect("value with checksum");
-            let result = Token::create((block & u64::from(u32::MAX)).try_into().unwrap());
-
-            if result.block() == block {
-                Ok(result)
-            } else {
-                Err("Token checksum is not valid")
-            }
-        } else {
-            Err("Token length have to be 7 and chars 0-9 and a-v allowed")
-        }
+        parse_token(token)
     }
 
     pub fn get_value(&self) -> u32 {
@@ -108,15 +94,7 @@ impl TokenId {
     }
 
     pub fn decode(tokenid : &str) -> Result<TokenId,&str> {
-        let res : Vec<Result<Token,&str>> = tokenid.split('-').map(|t| Token::decode(t)).collect();
-
-        if res.iter().all(|r| r.is_ok()) {
-            let token : Vec<Token> = res.iter().map(|r| r.unwrap()).collect();
-
-            Ok(TokenId::create(token.into_boxed_slice()))
-        } else {
-            Err(res.iter().find(|r| r.is_err()).unwrap().unwrap_err())
-        }
+        parse_token_id(tokenid)
     }
 
     pub fn get_tokens(&self) -> Vec<Token> {
@@ -179,9 +157,35 @@ impl Into<String> for TokenId {
 
 impl From<u32> for Token {
     fn from(value : u32) -> Self {
-        Token::create(value)
+        Self::create(value)
     }
 }
+
+/*
+impl From<String> for Token {
+    fn from(value : String) -> Self {
+        Self::decode(&value)
+    }
+}
+
+impl From<&str> for Token {
+    fn from(value : &str) -> Self {
+        Self::decode(value)
+    }
+}
+
+impl From<String> for TokenId {
+    fn from(value : String) -> Self {
+        Self::decode(&value)
+    }
+}
+
+impl From<&str> for TokenId {
+    fn from(value : &str) -> Self {
+        Self::decode(value)
+    }
+}
+*/
 
 impl Display for Token {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
